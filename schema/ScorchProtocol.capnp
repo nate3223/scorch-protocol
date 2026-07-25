@@ -57,8 +57,7 @@ struct AuthenticationChallenge {
 }
 
 struct AuthenticationRequest {
-	uuid		@0	:Text;
-	signature	@1	:Data;
+	signature	@0	:Data;
 }
 
 struct AuthenticationResult {
