@@ -1,5 +1,8 @@
 @0x807b51725243a5e3;
 
+using Cxx = import "/capnp/c++.capnp";
+$Cxx.namespace("scorch::protocol");
+
 struct AgentMessage {
 	union {
 		# Existing registrations

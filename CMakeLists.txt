@@ -6,7 +6,7 @@ endif()
 
 project(
 	ScorchProtocol
-	VERSION 0.1.0
+	VERSION 0.1.1
 	LANGUAGES CXX
 )
 
@@ -15,7 +15,7 @@ find_package(CapnProto CONFIG REQUIRED)
 capnp_generate_cpp(
 	CAPNP_SRCS
 	CAPNP_HDRS
-	${CMAKE_CURRENT_SOURCE_DIR}/schema/protocol.capnp
+	${CMAKE_CURRENT_SOURCE_DIR}/schema/ScorchProtocol.capnp
 )
 
 add_library(${PROJECT_NAME} STATIC
