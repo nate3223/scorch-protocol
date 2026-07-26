@@ -22,7 +22,7 @@ struct ServerMessage {
 		authenticationResult		@1	:AuthenticationResult;
 
 		# New registrations
-		pairCode					@2	:PairCode;
+		pairCode					@2	:PairCodeResult;
 		pairingResult				@3	:PairingResult;
 	}
 }
@@ -89,6 +89,13 @@ struct AuthenticationResult {
 struct PairRequest {
 	uuid		@0	:Text;
 	publicKey	@1	:Data;
+}
+
+struct PairCodeResult {
+	union {
+		valid	@0	:PairCode;
+		invalid	@1	:Void;
+	}
 }
 
 struct PairCode {
