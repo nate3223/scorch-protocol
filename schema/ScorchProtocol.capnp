@@ -11,6 +11,7 @@ struct AgentMessage {
 
 		# New registrations
 		pair						@2	:PairRequest;
+		pairingConfirmation			@3	:PairingConfirmation;
 	}
 }
 
@@ -79,6 +80,8 @@ struct AuthenticationResult {
 #    |                                            |
 #    |<-------------------- PairingResult --------|
 #    |                                            |
+#    |----- PairingConfirmation ----------------->|
+#    |                                            |
 #    |----- AuthenticationInitiation ------------>|
 #    |<Agent connects as an exsiting registration>|
 #    |                                            |
@@ -94,7 +97,18 @@ struct PairCode {
 
 struct PairingResult {
 	union {
-		success		@0	:Void;
+		success		@0	:PairingSuccess;
 		timedOut	@1	:Void;
+	}
+}
+
+struct PairingSuccess {
+	pairingInfo	@0	:Text;
+}
+
+struct PairingConfirmation {
+	union {
+		approved	@0	:Void;
+		rejected	@1	:Void;
 	}
 }
