@@ -33,7 +33,7 @@ struct ServerMessage {
 #    |---- TCP/TLS connection ----------------->|
 #    |---- AuthenticationInitiation ----------->|
 #    |                                          |
-#    |<--------- AuthenticationChallenge -------|
+#    |<----- AuthenticationInitiationResponse --|
 #    |                                          |
 #    |---- AuthenticationRequest -------------->|
 #    |                                          |
@@ -50,6 +50,7 @@ struct AuthenticationInitiationResponse {
 	union {
 		challenge	@0	:AuthenticationChallenge;
 		invalidUuid	@1	:Void;
+		retry		@2	:Void;
 	}
 }
 
@@ -74,7 +75,7 @@ struct AuthenticationResult {
 #    |----- TCP/TLS connection ------------------>|
 #    |----- PairRequest ------------------------->|
 #    |                                            |
-#    |<------------------------ PairCode ---------|
+#    |<--------------------- PairCodeResult ------|
 #    |                                            |
 #    |    <User enters PairCode in Discord>       |
 #    |                                            |
