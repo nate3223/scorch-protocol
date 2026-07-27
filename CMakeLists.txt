@@ -23,16 +23,66 @@ add_library(${PROJECT_NAME} STATIC
 	${CAPNP_HDRS}
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC
-	CapnProto::capnp
+add_library(Scorch::Protocol ALIAS ${PROJECT_NAME})
+
+target_link_libraries(${PROJECT_NAME}
+	PUBLIC
+		CapnProto::capnp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-	${CMAKE_CURRENT_BINARY_DIR}/schema
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/schema>
+		$<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(${PROJECT_NAME} PUBLIC
-	cxx_std_20
+target_compile_features(${PROJECT_NAME}
+	PUBLIC
+		cxx_std_20
 )
 
-add_library(Scorch::Protocol ALIAS ScorchProtocol)
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+install(
+	TARGETS ${PROJECT_NAME}
+	EXPORT ScorchProtocolTargets
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(
+	FILES
+		${CAPNP_HDRS}
+	DESTINATION
+		${CMAKE_INSTALL_INCLUDEDIR}/scorch/protocol
+)
+
+install(
+	EXPORT ScorchProtocolTargets
+	FILE ScorchProtocolTargets.cmake
+	NAMESPACE Scorch::
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ScorchProtocol
+)
+
+configure_package_config_file(
+	cmake/ScorchProtocolConfig.cmake.in
+	${CMAKE_CURRENT_BINARY_DIR}/ScorchProtocolConfig.cmake
+	INSTALL_DESTINATION
+		${CMAKE_INSTALL_LIBDIR}/cmake/ScorchProtocol
+)
+
+write_basic_package_version_file(
+	${CMAKE_CURRENT_BINARY_DIR}/ScorchProtocolConfigVersion.cmake
+	VERSION ${PROJECT_VERSION}
+	COMPATIBILITY SameMajorVersion
+)
+
+install(
+	FILES
+		${CMAKE_CURRENT_BINARY_DIR}/ScorchProtocolConfig.cmake
+		${CMAKE_CURRENT_BINARY_DIR}/ScorchProtocolConfigVersion.cmake
+	DESTINATION
+		${CMAKE_INSTALL_LIBDIR}/cmake/ScorchProtocol
+)
