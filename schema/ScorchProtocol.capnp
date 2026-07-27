@@ -96,6 +96,7 @@ struct PairCodeResult {
 	union {
 		valid	@0	:PairCode;
 		invalid	@1	:Void;
+		retry	@2	:Void;
 	}
 }
 
