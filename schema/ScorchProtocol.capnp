@@ -12,6 +12,10 @@ struct AgentMessage {
 		# New registrations
 		pair						@2	:PairRequest;
 		pairingConfirmation			@3	:PairingConfirmation;
+
+		# Connected
+		heartbeat					@4	:HeartbeatRequest;
+		command						@5	:CommandResponse;
 	}
 }
 
@@ -24,6 +28,10 @@ struct ServerMessage {
 		# New registrations
 		pairCode					@2	:PairCodeResult;
 		pairingResult				@3	:PairingResult;
+
+		# Connected
+		heartbeat					@4	:HeartbeatResponse;
+		command						@5	:CommandRequest;
 	}
 }
 
@@ -120,4 +128,53 @@ struct PairingConfirmation {
 		approved	@0	:Void;
 		rejected	@1	:Void;
 	}
+}
+
+# Connected
+
+struct HeartbeatRequest {
+	timestamp	@0	:UInt64;
+}
+
+struct HeartbeatResponse {
+	timestamp	@0	:UInt64;
+}
+
+struct CommandRequest {
+	id			@0	:UInt64;
+	timestamp	@1	:UInt64;
+
+	union {
+		http		@2	:HttpCommand;
+		reserved	@3	:Void;
+	}
+}
+
+struct HttpCommand {
+	url		@0	:Text;
+	method	@1	:Text;
+	headers	@2	:List(Header);
+	body	@3	:Data;
+}
+
+struct Header {
+	name	@0	:Text;
+	value	@1	:Text;
+}
+
+struct CommandResponse {
+	id			@0	:UInt64;
+	timestamp	@1	:UInt64;
+
+	union {
+		success			@2	:Void;
+		error			@3	:Text;
+		httpResponse	@4	:HttpResponse;
+	}
+}
+
+struct HttpResponse {
+	statusCode	@0	:UInt32;
+	headers		@1	:List(Header);
+	body		@2	:Data;
 }
