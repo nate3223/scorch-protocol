@@ -14,7 +14,7 @@ struct AgentMessage {
 		pairingConfirmation			@3	:PairingConfirmation;
 
 		# Connected
-		heartbeat					@4	:HeartbeatRequest;
+		heartbeat					@4	:Heartbeat;
 		command						@5	:CommandResponse;
 	}
 }
@@ -30,7 +30,7 @@ struct ServerMessage {
 		pairingResult				@3	:PairingResult;
 
 		# Connected
-		heartbeat					@4	:HeartbeatResponse;
+		heartbeat					@4	:Heartbeat;
 		command						@5	:CommandRequest;
 	}
 }
@@ -132,11 +132,7 @@ struct PairingConfirmation {
 
 # Connected
 
-struct HeartbeatRequest {
-	timestamp	@0	:UInt64;
-}
-
-struct HeartbeatResponse {
+struct Heartbeat {
 	timestamp	@0	:UInt64;
 }
 
