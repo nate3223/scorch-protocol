@@ -4,35 +4,51 @@ using Cxx = import "/capnp/c++.capnp";
 $Cxx.namespace("scorch::protocol");
 
 struct AgentMessage {
+	# Correlation IDs are zero when unused during sequential initialization.
+	messageId	@0	:UInt64;
+	replyTo		@1	:UInt64;
+
 	union {
+		error						@2	:ProtocolError;
+
 		# Existing registrations
-		authenticationInitiation	@0	:AuthenticationInitiation;
-		authenticationRequest		@1	:AuthenticationRequest;
+		authenticationInitiation	@3	:AuthenticationInitiation;
+		authenticationRequest		@4	:AuthenticationRequest;
 
 		# New registrations
-		pair						@2	:PairRequest;
-		pairingConfirmation			@3	:PairingConfirmation;
+		pair						@5	:PairRequest;
+		pairingConfirmation			@6	:PairingConfirmation;
 
 		# Connected
-		heartbeat					@4	:Heartbeat;
-		command						@5	:CommandResponse;
+		heartbeat					@7	:Heartbeat;
+		command						@8	:CommandResponse;
 	}
 }
 
 struct ServerMessage {
+	# Correlation IDs are zero when unused during sequential initialization.
+	messageId	@0	:UInt64;
+	replyTo		@1	:UInt64;
+
 	union {
+		error						@2	:ProtocolError;
+
 		# Existing registrations
-		authenticationInitiation	@0	:AuthenticationInitiationResponse;
-		authenticationResult		@1	:AuthenticationResult;
+		authenticationInitiation	@3	:AuthenticationInitiationResponse;
+		authenticationResult		@4	:AuthenticationResult;
 
 		# New registrations
-		pairCode					@2	:PairCodeResult;
-		pairingResult				@3	:PairingResult;
+		pairCode					@5	:PairCodeResult;
+		pairingResult				@6	:PairingResult;
 
 		# Connected
-		heartbeat					@4	:Heartbeat;
-		command						@5	:CommandRequest;
+		heartbeat					@7	:Heartbeat;
+		command						@8	:CommandRequest;
 	}
+}
+
+struct ProtocolError {
+	message	@0	:Text;
 }
 
 #  Existing registrations
@@ -137,12 +153,11 @@ struct Heartbeat {
 }
 
 struct CommandRequest {
-	id			@0	:UInt64;
-	timestamp	@1	:UInt64;
+	timestamp	@0	:UInt64;
 
 	union {
-		http		@2	:HttpCommand;
-		reserved	@3	:Void;
+		http		@1	:HttpCommand;
+		reserved	@2	:Void;
 	}
 }
 
@@ -159,13 +174,12 @@ struct Header {
 }
 
 struct CommandResponse {
-	id			@0	:UInt64;
-	timestamp	@1	:UInt64;
+	timestamp	@0	:UInt64;
 
 	union {
-		success			@2	:Void;
-		error			@3	:Text;
-		httpResponse	@4	:HttpResponse;
+		success			@1	:Void;
+		error			@2	:Text;
+		httpResponse	@3	:HttpResponse;
 	}
 }
 
