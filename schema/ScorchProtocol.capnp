@@ -22,6 +22,7 @@ struct AgentMessage {
 		# Connected
 		heartbeat					@7	:Heartbeat;
 		command						@8	:CommandResponse;
+		shareConfirmation			@9	:ShareConfirmation;
 	}
 }
 
@@ -44,6 +45,7 @@ struct ServerMessage {
 		# Connected
 		heartbeat					@7	:Heartbeat;
 		command						@8	:CommandRequest;
+		shareRequest				@9	:ShareRequest;
 	}
 }
 
@@ -147,6 +149,17 @@ struct PairingConfirmation {
 }
 
 # Connected
+
+struct ShareRequest {
+	info	@0	:Text;
+}
+
+struct ShareConfirmation {
+	union {
+		approved	@0	:Void;
+		rejected	@1	:Void;
+	}
+}
 
 struct Heartbeat {
 	timestamp	@0	:UInt64;
