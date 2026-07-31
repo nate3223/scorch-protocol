@@ -23,6 +23,11 @@ struct AgentMessage {
 		heartbeat					@7	:Heartbeat;
 		command						@8	:CommandResponse;
 		shareConfirmation			@9	:ShareConfirmation;
+
+		# Services
+		services					@10	:List(ServiceDescriptor);
+		serviceUpdate				@11	:List(ServiceUpdate);
+		servicesSubscription		@12	:List(ServiceSubscription);
 	}
 }
 
@@ -46,6 +51,10 @@ struct ServerMessage {
 		heartbeat					@7	:Heartbeat;
 		command						@8	:CommandRequest;
 		shareRequest				@9	:ShareRequest;
+
+		# Services
+		listServices				@10	:ListServices;
+		servicesSubscription		@11	:List(ServiceSubscription);
 	}
 }
 
@@ -200,4 +209,77 @@ struct HttpResponse {
 	statusCode	@0	:UInt32;
 	headers		@1	:List(Header);
 	body		@2	:Data;
+}
+
+# Services
+
+struct ServiceDescriptor {
+	id				@0	:Text;
+	displayName		@1	:Text;
+	adapterId		@2	:Text;
+	subjects		@3	:ServiceSubjects;
+	actions			@4	:List(ServiceAction);
+}
+
+struct ServiceSubjects {
+	status		@0	:Bool;
+}
+
+struct ServiceAction {
+	id			@0	:Text;
+	displayName	@1	:Text;
+}
+
+struct ServiceStatus {
+	state		@0	:ServiceState;
+	health		@1	:ServiceHealth;
+	summary		@2	:Text;
+	timestamp	@3	:Int64;
+	fields		@4	:List(StatusField);
+}
+
+enum ServiceState {
+	unknown		@0;
+	offline		@1;
+	starting	@2;
+	online		@3;
+	stopping	@4;
+}
+
+enum ServiceHealth {
+	unknown		@0;
+	healthy		@1;
+	degraded	@2;
+	unhealthy	@3;
+}
+
+struct StatusField {
+	label	@0	:Text;
+	value	@1	:Text;
+}
+
+struct ListServices {
+	union {
+		all			@0	:Void;
+		services	@1	:List(Text);
+	}
+}
+
+struct ServiceUpdate {
+	serviceId		@0	:Text;
+	union {
+		descriptor	@1	:ServiceDescriptor;
+		status		@2	:ServiceStatus;
+	}
+}
+
+struct ServiceSubscription {
+	serviceId		@0	:Text;
+	
+	union {
+		subscribe	@1	:Void;
+		unsubscribe	@2	:Void;
+	}
+
+	subjects		@3	:ServiceSubjects;
 }

@@ -49,7 +49,11 @@ if __name__ == "__main__":
 	BUILDROOT.mkdir(exist_ok=True)
 
 	configure_args = []
-	build_args = []
+	build_args = ["--config", "Release"]
+
+	for name, value in env.items():
+		if name.startswith("FETCHCONTENT_SOURCE_DIR_") and value:
+			configure_args.append(f"-D{name}={value}")
 
 	if shutil.which("ninja"):
 		configure_args.extend(["-G", "Ninja"])
